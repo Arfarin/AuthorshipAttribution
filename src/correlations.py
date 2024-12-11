@@ -11,6 +11,9 @@ elevenClassGeminiPerformance = [1, 0 ,0 ,1 ,1, 1, 1 ,1, 1, 0 ,1, 0 ,1 ,0 ,1 ,1 ,
 openClassGPTPerformance = [1,0,1,1,1,1,1,1,1,0,0,0,1,0,0,1,1,0,1,1,0,0]
 elevenClassGPTPerformance = [1,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,0,1,1,1,0]
 
+
+
+#######################################################################################
 ## Analysis of correlation between availability and LLM performance via Chi-Square-Test 
 
 onlineAvailability = [1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
@@ -35,6 +38,40 @@ results_elevenClass_gpt_availability = chi2_contingency_test(onlineAvailability,
 print("p Wert für Korrelationstest ElevenClass GPT Availability: ", results_elevenClass_gpt_availability[1])
 
 
+#######################################################################################
+## Analysis of correlation between genre and LLM performance via a Chi-Square-Test
+
+genre = ["Roman","Roman","Kinderbuch/Jugendliteratur","Roman","Roman","Roman","Roman","Kinderbuch/Jugendliteratur","Kinderbuch/Jugendliteratur","Roman","Roman","Roman","Kinderbuch/Jugendliteratur","Roman","Kinderbuch/Jugendliteratur","Roman","Roman","Roman","Roman","Roman","Roman","Brief"]
+unique_genres = set(genre)
+# Genres numerisch kodieren
+genre_mapping = {genre: idx + 1 for idx, genre in enumerate(sorted(unique_genres))}
+
+# Array umwandeln
+def convert_to_numeric(genre_list, mapping):
+    numeric_list = []
+    for g in genre_list:
+            # Einzelne Kategorien direkt kodieren
+            numeric_list.append(mapping[g])
+    return numeric_list
+
+# Anwendung
+genre_numeric = convert_to_numeric(genre, genre_mapping)
+
+results_openClass_gemini_genre_numeric = chi2_contingency_test(genre_numeric, openClassGeminiPerformance)
+print("p Wert für Korrelationstest OpenClass Gemini genre: ", results_openClass_gemini_availability[1])
+
+results_elevenClass_gemini_genre_numeric = chi2_contingency_test(genre_numeric, elevenClassGeminiPerformance)
+print("p Wert für Korrelationstest ElevenClass Gemini genre: ", results_elevenClass_gemini_availability[1])
+
+results_openClass_gpt_genre_numeric = chi2_contingency_test(genre_numeric, openClassGPTPerformance)
+print("p Wert für Korrelationstest OpenClass GPT genre: ", results_openClass_gpt_availability[1])
+
+results_elevenClass_gpt_genre_numeric = chi2_contingency_test(genre_numeric, elevenClassGPTPerformance)
+print("p Wert für Korrelationstest ElevenClass GPT genre: ", results_elevenClass_gpt_availability[1])
+
+
+
+##############################################################################################################
 ## Analysis of correlation between publication year (considered as continuous variable) and LLM performance via a Logistic Regression an a Chi-Square-Test
 
 print('Analysis of correlation: Publication Year ~ Performance LLMs')
